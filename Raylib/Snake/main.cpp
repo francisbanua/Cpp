@@ -4,12 +4,13 @@ const int screenWidth = 450;
 const int screenHeight = 450;
 bool gameOver;
 int x, y, fruitX, fruitY, score;
-enum eDirection { STOP = 0, LEFT, RIGHT, UP, DOWN};
+enum eDirection {STOP = 0, LEFT, RIGHT, UP, DOWN};
 eDirection dir;
 Rectangle head;
 Rectangle fruit;
-const int sWidth = 20;
-const int sHeight = 20;
+const int nS = 20;
+const int sWidth = screenWidth / nS;
+const int sHeight = screenHeight / nS;
 
 void Setup_() {
     gameOver = false;
@@ -21,7 +22,17 @@ void Setup_() {
     score = 0;
 }
 
+void drawBg() {
+    for (int i = sWidth; i < screenWidth; i += sWidth) {
+        DrawLine(i, 0, i, screenHeight, BLACK);
+    }
+    for (int i = sHeight; i < screenHeight; i += sHeight) {
+        DrawLine(0, i, screenWidth, i, BLACK);
+    }
+}
+
 void Draw_() {
+    drawBg();
     DrawRectangleRec(head, BLUE);
     DrawRectangleRec(fruit, RED);
 }
@@ -44,16 +55,16 @@ void Input_() {
 void Logic_() {
     switch (dir) {
         case UP:
-            y--;
+            y -= sHeight;
             break;
         case LEFT:
-            x--;
+            x -= sWidth;
             break;
         case DOWN:
-            y++;
+            y += sHeight;
             break;
         case RIGHT:
-            x++;
+            x += sWidth;
             break;
     }
     head = {(float) x, (float) y, sWidth, sHeight};
@@ -75,7 +86,7 @@ int main(void)
 
     Setup_();
 
-    SetTargetFPS(60);               // Set our game to run at 60 frames-per-second
+    SetTargetFPS(24);               // Set our game to run at 60 frames-per-second
     //--------------------------------------------------------------------------------------
 
     // Main game loop
